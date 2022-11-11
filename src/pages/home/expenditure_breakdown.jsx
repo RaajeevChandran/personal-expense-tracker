@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./home.css"
-import Loader from "../loader/loader";
+import Loader from "../../components/loader/loader";
 
 
 const ExpenditureBreakdown = () => {

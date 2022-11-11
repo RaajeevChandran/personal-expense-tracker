@@ -4,7 +4,7 @@ import {
     Routes,
     BrowserRouter as Router
   } from 'react-router-dom';
-import Home from './components/home/home';
+import Home from './pages/home/home';
 
 const AppRoutes = () => (
     <Router>

@@ -2,11 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
 import "./home.css"
 import ExpenditureBreakdown from './expenditure_breakdown';
-import ExpenditureTable from '../expenditure_table/expenditure_table';
 import 'font-awesome/css/font-awesome.min.css';
 import { useNavigate } from "react-router-dom";
-import AddExpenseModal from '../add_expense_modal/add_expense_modal';
-import ExpenseCharts from '../expense_charts/expense_charts';
+import AddExpenseModal from "../../components/add_expense_modal/add_expense_modal"
+import ExpenseCharts from "../../components/expense_charts/expense_charts"
 
 const Home = () => {
   const navigate = useNavigate();
