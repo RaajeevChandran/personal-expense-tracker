@@ -19,7 +19,6 @@ export const Login = (props)  => {
       console.log(`User Created!Email: ${inputs.email},password : ${inputs.password}`);
       addUserId('rcn');
       navigate("/")
-      // firebase.auth().signInWithEmailAndPassword(inputs.email.trim(),inputs.password).then(()=>history.push("/home")).catch((e)=>console.log(e));
     }
 
     return (
@@ -29,12 +28,12 @@ export const Login = (props)  => {
           <div className="form">
             <div className="form-group">
               <label htmlFor="email">E-mail</label>
-              <input type="text" name="email" placeholder="E-mail" value={inputs.email}
+              <input type="text" name="email" value={inputs.email}
               onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" name="password" placeholder="Password" value={inputs.password}
+              <input type="password" name="password" value={inputs.password}
               onChange={handleInputChange} />
             </div>
           </div>

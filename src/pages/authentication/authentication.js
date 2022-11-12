@@ -47,7 +47,7 @@ class Authentication extends React.Component {
       <AuthenticationContainer>
         <LeftSideContainer>
         
-            <img style={{width:"100%",height:"100%",objectFit:"contain",backgroundColor:"#7ac8f9"}} src={illustration} alt=""/>
+            <img style={{width:"100%",height:"100%",objectFit:"contain",backgroundColor:"white"}} src={illustration} alt=""/>
 
         </LeftSideContainer>
         

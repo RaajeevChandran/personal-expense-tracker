@@ -40,7 +40,7 @@
     font-size: 1.5rem;
   }
 
-  .add-expense-form{
+  .form{
     display: flex;
     flex-direction: column;
     align-items: center;

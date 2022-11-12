@@ -1,4 +1,4 @@
 import "./authentication.css";
 
-export {Login }from "./signin";
+export {Login } from "./signin";
 export { Register } from "./signup";

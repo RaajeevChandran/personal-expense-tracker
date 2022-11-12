@@ -49,7 +49,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
         </button>
         </div>
 
-        <div className='add-expense-form'>
+        <div className='form'>
         <h1>Create Expense</h1>
         <form>
         <h6 style={{margin:'1em',fontWeight:"bold"}}>Date</h6>
