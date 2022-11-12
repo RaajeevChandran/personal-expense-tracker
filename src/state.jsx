@@ -8,7 +8,7 @@ const useStore = create(set => ({
     fetchExpenditureBreakdown: async()=>{
         const response = await fetch("https://api.github.com/search/users?q=john&per_page=5");
         const json = await response.json();
-        set({expenditureBreakdown: {
+        set(_ => ({expenditureBreakdown: {
             "totalSpent" : "3,000",
             "today": "200",
             "thisWeek": "500",
@@ -17,7 +17,21 @@ const useStore = create(set => ({
             "mostSpentOn": "Food",
             "mostSpentDay":"Thursday",
             "leastSpentDay":"Monday"
-          }});
+          }}));
+    },
+    logIn: async ()=>{
+      const response = await fetch("https://api.github.com/search/users?q=john&per_page=5");
+      const json = await response.json();
+      set(_ => ({
+        userId: 'rcn'
+      }))
+    },
+    signUp: async ()=>{
+      const response = await fetch("https://api.github.com/search/users?q=john&per_page=5");
+      const json = await response.json();
+      set(_ => ({
+        userId: 'rcn'
+      }))
     },
     logout : () => {
       set(_ => ({userId: ""}))

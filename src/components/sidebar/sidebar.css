@@ -25,14 +25,13 @@
     padding: 1rem 3rem;
     font-size: 1.25rem;
     font-weight: 500;
-    text-decoration: none;
+    text-decoration: none!important;
     color: #555;
     transition: color 0.3s ease-in-out;
 }
 .sidebar__menu__item.active {
-    color: #fff;
-    text-decoration: none;
-
+    color: black;
+    text-decoration: none!important;
 }
 .sidebar__menu__item__icon {
     margin-right: 1rem;
@@ -46,15 +45,15 @@
     left: 50%;
     width: calc(100% - 40px);
     border-radius: 10px;
-    background-color: #0073ff;
-    text-decoration: none;
+    background-color: white;
+    text-decoration: none!important;
     z-index: -1;
     transform: translateX(-50%);
     transition: 0.3s ease-in-out;
 }
 
 .sidebar__menu__item__text{
-    text-decoration: none;
+    text-decoration: none!important;
 }
 
 .sign-out-button-container {
@@ -65,7 +64,7 @@
     margin: auto auto;
     border-radius: 10px;
     background-color: rgb(255, 129, 129);
-    text-decoration: none;
+    text-decoration: none!important;
     display: flex;
     align-items: center;
     place-content: flex-start;

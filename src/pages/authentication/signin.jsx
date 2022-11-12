@@ -5,19 +5,21 @@ import useStore from "../../state";
 
 export const Login = (props)  => {
     const [inputs, setInputs] = useState({});
-    const addUserId = useStore(state => state.setUserId)
-    const userId = useStore(state=>state.userId);
+    const logIn = useStore(state => state.logIn)
     const navigate = useNavigate()
+    const [loggingIn,setLoggingIn] = useState(false)
 
     const handleInputChange = (event) => {
       event.persist();
       setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       console.log(`User Created!Email: ${inputs.email},password : ${inputs.password}`);
-      addUserId('rcn');
+      setLoggingIn(true);
+      await logIn();
+      setLoggingIn(false)
       navigate("/")
     }
 
@@ -40,7 +42,11 @@ export const Login = (props)  => {
         </div>
         <div className="footer">
           <button type="button" className="btn" onClick={handleSubmit}>
-            Login
+            {
+              loggingIn ? 
+              "Logging In"
+              : "Login"
+            }
           </button>
         </div>
       </div>
