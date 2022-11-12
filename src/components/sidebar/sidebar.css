@@ -15,6 +15,8 @@
 }
 .sidebar__menu {
     position: relative;
+    height: 75%;
+    /* background-color: #fff; */
 }
 .sidebar__menu__item {
     display: flex;
@@ -53,4 +55,25 @@
 
 .sidebar__menu__item__text{
     text-decoration: none;
+}
+
+.sign-out-button-container {
+    
+    /* width: calc(100% - 40px); */
+    width: 80%;
+    height: 60px;
+    margin: auto auto;
+    border-radius: 10px;
+    background-color: rgb(255, 129, 129);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    place-content: flex-start;
+    padding-left: 1.75rem;
+    color: white;
+    cursor: pointer;
+    /* z-index: -1; */
+    /* transform: translateX(-50%); */
+    /* transition: 0.3s ease-in-out; */
+    
 }

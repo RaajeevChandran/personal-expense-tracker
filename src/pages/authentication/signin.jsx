@@ -1,9 +1,13 @@
 import React,{useState} from "react";
+import { useNavigate } from "react-router-dom";
+import useStore from "../../state";
 // import {useHistory} from "react-router-dom"
 
 export const Login = (props)  => {
     const [inputs, setInputs] = useState({});
-    // const history = useHistory()
+    const addUserId = useStore(state => state.setUserId)
+    const userId = useStore(state=>state.userId);
+    const navigate = useNavigate()
 
     const handleInputChange = (event) => {
       event.persist();
@@ -13,6 +17,8 @@ export const Login = (props)  => {
     const handleSubmit = (event) => {
       event.preventDefault();
       console.log(`User Created!Email: ${inputs.email},password : ${inputs.password}`);
+      addUserId('rcn');
+      navigate("/")
       // firebase.auth().signInWithEmailAndPassword(inputs.email.trim(),inputs.password).then(()=>history.push("/home")).catch((e)=>console.log(e));
     }
 

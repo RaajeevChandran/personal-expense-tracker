@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import useStore from '../../state';
 import './sidebar.css';
 
 const sidebarNavItems = [
@@ -9,12 +10,6 @@ const sidebarNavItems = [
         to: '/',
         section: ''
     },
-    // {
-    //     display: 'Getting Started',
-    //     icon: <i className='bx bx-star'></i>,
-    //     to: '/started',
-    //     section: 'started'
-    // },
     {
         display: 'Stats',
         icon: <i className='bx bx-stats'></i>,
@@ -36,6 +31,8 @@ const Sidebar = () => {
     const sidebarRef = useRef();
     const indicatorRef = useRef();
     const location = useLocation();
+
+    const logOut = useStore(state=> state.logout)
 
     useEffect(() => {
         setTimeout(() => {
@@ -78,6 +75,7 @@ const Sidebar = () => {
                 ))
             }
         </div>
+        <div className='sign-out-button-container' onClick={logOut}><i style={{fontSize:"1.75rem",marginRight:"8px"}} class='bx bxs-log-out'></i>  Sign Out </div>
     </div>;
 };
 

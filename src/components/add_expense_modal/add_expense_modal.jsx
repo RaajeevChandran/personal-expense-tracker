@@ -35,6 +35,10 @@ const AddExpenseModal = ({ handleClose, show }) => {
 
   const { amount, notes,date } = formData;
 
+  const handleSubmit = () => {
+    
+  }
+
   return (
     <div className={showHideClassName}>
       <div className="modal-main">
@@ -93,7 +97,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
         required
       />
 
-      <button type="submit" className='create-expense-button'>Create</button>
+      <button  className='create-expense-button'>Create</button>
     </form>
         </div>
       </div>

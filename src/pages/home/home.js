@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./home.css"
-import ExpenditureBreakdown from './expenditure_breakdown';
+import ExpenditureBreakdown from '../../components/expenditure_breakdown/expenditure_breakdown';
 import 'font-awesome/css/font-awesome.min.css';
 import { useNavigate } from "react-router-dom";
 import AddExpenseModal from "../../components/add_expense_modal/add_expense_modal"

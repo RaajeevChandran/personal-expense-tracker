@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import "./home.css"
-import Loader from "../../components/loader/loader";
+import "../../pages/home/home.css"
+import Loader from "../loader/loader";
 
 
 const ExpenditureBreakdown = () => {
@@ -57,7 +57,7 @@ const ExpenditureBreakdown = () => {
               <div className={`card ${gradients[i%4]} text-white mb-3 mb-md-0`}>
             <div className="card-body d-flex justify-content-between align-items-end">
               <div className="card-number">
-                <div className="h3 m-0">{val}</div><small><strong>{key.replace(/([A-Z])/g, " $1").charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</strong></small>
+                <div className="h3 m-0">{val.match(/^\d/) ? `₹ ${val}`:val}</div><small><strong>{key.replace(/([A-Z])/g, " $1").charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</strong></small>
               </div>
               <div className="card-description text-right"><small> </small><br/><small> </small></div>
             </div>
