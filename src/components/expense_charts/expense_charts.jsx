@@ -67,7 +67,7 @@ export default class ExpenseCharts extends PureComponent {
 
   render() {
     return (
-      <div style={{display:'flex',flexDirection:'row'}}>
+      <div style={{display:'flex',flexDirection:'row',marginTop:"20px"}}>
         <ResponsiveContainer  width={'99%'} height={500}>
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid />

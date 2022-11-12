@@ -63,7 +63,7 @@
     height: 60px;
     margin: auto auto;
     border-radius: 10px;
-    background-color: rgb(255, 129, 129);
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
     text-decoration: none!important;
     display: flex;
     align-items: center;
