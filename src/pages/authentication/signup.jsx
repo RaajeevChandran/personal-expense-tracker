@@ -2,6 +2,8 @@ import { sign } from "fontawesome";
 import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../state";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Register = (props) => {
   const [inputs, setInputs] = useState({});
@@ -11,43 +13,66 @@ export const Register = (props) => {
 
     const handleInputChange = (event) => {
       event.persist();
-      setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
+      setInputs(inputs => ({...inputs, [event.target.name]: event.target.name == 'monthly-limit' ? parseInt(event.target.value) : event.target.value}));
+    }
+
+    const showErrorToast = (text) => {
+      toast.error(text,{
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+
     }
 
     const handleSubmit = async (event) => {
+      try{
       event.preventDefault();
-      console.log(`User Created!Email: ${inputs.email},password : ${inputs.password}`);
+      if(inputs.name === '' || !/\S+@\S+\.\S+/.test(inputs.email) || inputs.monthlyLimit === '' || inputs.password === ''){
+        showErrorToast("Please fill valid data");
+        return;
+      }
       setSigningUp(true)
-      await signUp();
+      await signUp(inputs);
       setSigningUp(false)
       navigate("/")
+      }catch(e){
+      setSigningUp(false)
+      showErrorToast("Something went wrong")
+      }
     }
 
 
     return (
       <div className="base-container" ref={props.containerRef}>
         <div className="header">Register</div>
+        <ToastContainer/>
         <div className="content">
           <div className="form">
             <div className="form-group">
               <label htmlFor="username">Name</label>
-              <input type="text" name="username" value={inputs.username}
+              <input type="text" name="name" value={inputs.username} required
               onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input type="text" name="email"  value={inputs.email}
+              <input type="text" name="email"  value={inputs.email} required
               onChange={handleInputChange}/>
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" name="password"  value={inputs.password}
+              <input type="password" name="password"  value={inputs.password} required
               onChange={handleInputChange}/>
             </div>
             <div className="
             form-group">
               <label htmlFor="monthly-limit">Monthly Limit (₹)</label>
-              <input type="number" name="monthlyLimit"  value={inputs.monthlyLimit}
+              <input type="number" name="monthly-limit"  value={inputs.monthlyLimit} required
               onChange={handleInputChange}/>
             </div>
           </div>
@@ -61,4 +86,5 @@ export const Register = (props) => {
         </div>
       </div>
     );
-  }
+  
+}

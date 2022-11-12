@@ -1,7 +1,8 @@
 import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../state";
-// import {useHistory} from "react-router-dom"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Login = (props)  => {
     const [inputs, setInputs] = useState({});
@@ -14,18 +15,37 @@ export const Login = (props)  => {
       setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
     }
 
+    const showErrorToast = (text) => {
+      toast.error(text,{
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    }
+
     const handleSubmit = async (event) => {
-      event.preventDefault();
-      console.log(`User Created!Email: ${inputs.email},password : ${inputs.password}`);
+      try{event.preventDefault();
+        if(!/\S+@\S+\.\S+/.test(inputs.email) || inputs.password === ''){
+          showErrorToast("Invalid Credentials")
+          return;
+        }
       setLoggingIn(true);
       await logIn();
       setLoggingIn(false)
-      navigate("/")
+      navigate("/")}catch(e){
+       showErrorToast("Something went wrong")
+      }
     }
 
     return (
       <div className="base-container" ref={props.containerRef}>
         <div className="header">Login</div>
+        <ToastContainer/>
         <div className="content">
           <div className="form">
             <div className="form-group">

@@ -3,48 +3,50 @@ import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis, 
 
 const data = [
   {
-    subject: 'Math',
+    subject: 'Food',
     A: 120,
     B: 110,
-    fullMark: 150,
+    fullMark: 3000,
   },
   {
-    subject: 'Chinese',
+    subject: 'Automobiles',
     A: 98,
     B: 130,
-    fullMark: 150,
+    fullMark: 3000,
   },
   {
-    subject: 'English',
+    subject: 'Entertainment',
     A: 86,
     B: 130,
-    fullMark: 150,
+    fullMark: 3000,
   },
   {
-    subject: 'Geography',
+    subject: 'Clothing',
     A: 99,
     B: 100,
-    fullMark: 150,
+    fullMark: 3000,
   },
   {
-    subject: 'Physics',
+    subject: 'Healthcare',
     A: 85,
     B: 90,
-    fullMark: 150,
+    fullMark: 3000,
   },
   {
-    subject: 'History',
+    subject: 'Others',
     A: 65,
     B: 85,
-    fullMark: 150,
+    fullMark: 3000,
   },
 ];
 
 const pieData =  [
-  { name: 'Group A', value: 400 },
+  { name: 'Group A', value: 200 },
   { name: 'Group B', value: 300 },
   { name: 'Group C', value: 300 },
   { name: 'Group D', value: 200 },
+  { name: 'Group E', value: 600 },
+  { name: 'Group F', value: 200 },
 ];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -73,8 +75,8 @@ export default class ExpenseCharts extends PureComponent {
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
           <PolarRadiusAxis angle={30} domain={[0, 150]} />
-          <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-          <Radar name="Lily" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+          <Radar name="Food" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+          {/* <Radar name="Lily" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} /> */}
           <Legend />
         </RadarChart>
       </ResponsiveContainer>

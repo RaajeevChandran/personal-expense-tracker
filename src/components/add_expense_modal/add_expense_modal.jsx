@@ -12,8 +12,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
   });
   
 
-  let categories = [ "Food", "Automobiles", "Entertainment", "Clothing", "Healthcare", "Travel", "Shopping",
-    "Investment", "Gifts", "Bills", "Others"];
+  let categories = [ "Food", "Automobiles", "Entertainment", "Clothing", "Healthcare", "Others"];
   let expenseTypes = ["Credit","Debit"]
 
   const [categoryDropDown,setCategoryDropDown] = useState("Food")
@@ -97,7 +96,9 @@ const AddExpenseModal = ({ handleClose, show }) => {
         required
       />
 
+      <div className='create-expense-button-container'>
       <button  className='create-expense-button'>Create</button>
+      </div>
     </form>
         </div>
       </div>

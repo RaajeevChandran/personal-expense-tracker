@@ -1,4 +1,7 @@
 import create from "zustand"
+import Axios from "axios"
+// const url = "https://p-e-t.herokuapp.com";
+const url = "http://192.168.101.6:5000";
 const useStore = create(set => ({
     userId: '',
     setUserId:(id)=>set(state=>({userId: id})),
@@ -26,11 +29,16 @@ const useStore = create(set => ({
         userId: 'rcn'
       }))
     },
-    signUp: async ()=>{
-      const response = await fetch("https://api.github.com/search/users?q=john&per_page=5");
+    signUp: async (data)=>{
+      const response = await fetch(url+"/register",{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: data
+      })
       const json = await response.json();
+      console.log(json)
       set(_ => ({
-        userId: 'rcn'
+        userId: json['user_id']
       }))
     },
     logout : () => {

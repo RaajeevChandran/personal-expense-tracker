@@ -1,16 +1,36 @@
+.table-filter {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.filter-dropdown {
+    width: 40%;
+    height: 50px;
+    margin-right: 13px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.filter-dropdown-item {
+    border-radius: 15px;
+
+}
 
 .expense-table {
     width: 100%;
     border-collapse: collapse;
-    margin: auto auto;
+    margin-top: 30px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
-.column-names, .table-entry {
+
+.column-names,
+.table-entry {
     padding: 15px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     color: #000;
 }
+
 .column-names {
     text-align: left;
 }
@@ -19,9 +39,11 @@ tbody tr:hover {
     /* background-color: rgba(255,255,255,0.3); */
     background-color: #66c4ac;
 }
+
 tbody .table-entry {
     position: relative;
 }
+
 tbody .table-entry:hover:before {
     content: "";
     position: absolute;
@@ -42,8 +64,7 @@ tbody .table-entry:hover:before {
     gap: 20px;
 }
 
-#table-entry-icon{
+#table-entry-icon {
     font-size: 1.5rem;
     cursor: pointer;
 }
-
