@@ -2,47 +2,37 @@
  * {
 	 box-sizing: border-box;
 }
- body {
-	 margin: 0;
-	 padding: 0;
-	 width: 100%;
-	 height: 100%;
 
-	 /* background: linear-gradient(to right, #1488cc, #2b32b2);  */
-
-
-		  font-family: 'Poppins', sans-serif;
-}
  .main-container {
 	 width: 100%;
 	 height: 100%;
-	 display: grid;
-	 grid-template-columns: 5% auto;
+	 /* display: grid;
+	 grid-template-columns: 5% auto; */
 }
- .sidebar {
-	 display: flex;
-	 flex-direction: column;
-	 align-items: center;
-	 background: white;
-	 background: #1488cc;
+ /* .sidebar { */
+	 /* display: flex; */
+	 /* flex-direction: column; */
+	 /* align-items: center; */
+	 /* background: white; */
+	 /* background: #1488cc; */
 	 /* background: linear-gradient(to right bottom, rgba(255, 255, 255, .9), rgba(255, 255, 255, .2)); */
-}
- .sidebar .logo {
-	 padding-top: 10px;
-}
- .sidebar .nav-links {
-	 display: flex;
-	 flex-direction: column;
-	 align-items: center;
-}
- .sidebar .nav-links a:first-child {
-	 margin-top: 50px;
-	 margin-bottom: 50px;
-}
- .sidebar .nav-links a.active {
-	 border-right: 3px solid red;
-	 padding: 0 20px;
-}
+/* } */
+ /* .sidebar .logo { */
+	 /* padding-top: 10px; */
+/* } */
+ /* .sidebar .nav-links { */
+	 /* display: flex; */
+	 /* flex-direction: column; */
+	 /* align-items: center; */
+/* } */
+ /* .sidebar .nav-links a:first-child { */
+	 /* margin-top: 50px; */
+	 /* margin-bottom: 50px; */
+/* } */
+ /* .sidebar .nav-links a.active { */
+	 /* border-right: 3px solid red; */
+	 /* padding: 0 20px; */
+/* } */
  .main-area {
 	 height: 100%;
 	 width: 100%;
@@ -56,25 +46,25 @@
 }
 
  .hello-text {
-    padding-left: 20px;
+    padding-left: 12px;
  }
 
 
 .card-purple-blue {
     background: linear-gradient(45deg, #6d80fe 0%, #23d2fd 100%);
-    box-shadow: 0 5px 20px rgba(35, 210, 253, 0.3); }
+     }
   
   .card-salmon-pink {
     background: linear-gradient(45deg, #ff998b 0%, #ff6d88 100%);
-    box-shadow: 0 5px 20px rgba(255, 153, 139, 0.3); }
+     }
   
   .card-blue-green {
     background: linear-gradient(45deg, #09afe8 0%, #29f499 100%);
-    box-shadow: 0 5px 20px rgba(41, 244, 153, 0.3); }
+    }
   
   .card-purple-pink {
     background: linear-gradient(45deg, #707cff 0%, #fa81e8 100%);
-    box-shadow: 0 5px 20px rgba(250, 129, 232, 0.3); }
+     }
   
   .card {
     border: 0;
@@ -85,15 +75,17 @@
  
 	  .float{
 		position:fixed;
-		width:60px;
-		height:60px;
+		width:70px;
+		height:70px;
 		bottom:40px;
 		right:40px;
-		background-color:white;
-		color:#FFF;
+		border: none;
+		color: white;
 		border-radius:50px;
 		text-align:center;
 	  font-size:30px;
-	  padding-top: 6px;
+	 display: grid;
+	 place-items: center;
+	 background: linear-gradient(45deg, #09afe8 0%, #29f499 100%);
 	  z-index:100;
 	}

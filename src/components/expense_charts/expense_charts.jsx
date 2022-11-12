@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, PieChart, Pie, Sector, Cell, } from 'recharts';
 
 const data = [
   {
@@ -40,12 +40,35 @@ const data = [
   },
 ];
 
+const pieData =  [
+  { name: 'Group A', value: 400 },
+  { name: 'Group B', value: 300 },
+  { name: 'Group C', value: 300 },
+  { name: 'Group D', value: 200 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
 export default class ExpenseCharts extends PureComponent {
   static demoUrl = 'https://codesandbox.io/s/radar-chart-specified-domain-mfl04';
 
   render() {
     return (
-      <ResponsiveContainer width="100%" height="70%">
+      <div style={{display:'flex',flexDirection:'row'}}>
+        <ResponsiveContainer  width={'99%'} height={500}>
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
@@ -55,6 +78,15 @@ export default class ExpenseCharts extends PureComponent {
           <Legend />
         </RadarChart>
       </ResponsiveContainer>
+      <div style={{ width: '100%', height: 450 }}>
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie dataKey="value" data={pieData} fill="#8884d8" label />
+          </PieChart>
+        </ResponsiveContainer>
+        
+      </div>
+      </div>
     );
   }
 }
