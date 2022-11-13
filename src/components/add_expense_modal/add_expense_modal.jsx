@@ -1,35 +1,45 @@
 import "./add_expense_modal.css";
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useStore from "../../state";
 const AddExpenseModal = ({ handleClose, show }) => {
 	const showHideClassName = show ? "modal display-block" : "modal display-none";
+
+	const addExpense = useStore(state => state.addExpense)
 
 	const [formData, setFormData] = useState({
 		date: "",
 		amount: "",
-		category: "",
-		notes: "",
-		expenseType: "",
+		category: 1,
+		description: "",
+		expenseType: "credit",
 	});
 
-	let categories = [
-		"Food",
-		"Automobiles",
-		"Entertainment",
-		"Clothing",
-		"Healthcare",
-		"Others",
-	];
+	let categories = {
+		"Food":1,
+		"Automobiles":2,
+		"Entertainment":3,
+		"Clothing":4,
+		"Healthcare":5,
+		"Others":6,
+	};
 	let expenseTypes = ["Credit", "Debit"];
 
-	const [categoryDropDown, setCategoryDropDown] = useState("Food");
-	const [expenseType, setExpenseType] = useState("Credit");
+	const [creatingExpense,setCreatingExpense] = useState(false)
 
 	const onCategoryChange = (e) => {
-		setCategoryDropDown(e.target.value);
+		setFormData({
+			...formData,
+			'category_id': categories[e.target.value],
+		})
 	};
 
 	const onExpenseTypeChange = (e) => {
-		setExpenseType(e.target.value);
+		setFormData({
+			...formData,
+			'expense_type': e.target.value.toLowerCase(),
+		})
 	};
 
 	const updateFormData = (event) =>
@@ -38,9 +48,30 @@ const AddExpenseModal = ({ handleClose, show }) => {
 			[event.target.name]: event.target.value,
 		});
 
-	const { amount, notes, date } = formData;
+	const { amount, description, date } = formData;
 
-	const handleSubmit = () => {};
+	const showErrorToast = (text) => {
+		toast.error(text, {
+			position: "bottom-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: false,
+			draggable: true,
+			progress: undefined,
+			theme: "light",
+		});
+	};
+
+	const handleSubmit = async () => {
+		try{
+			// setCreatingExpense(true)
+			// await addExpense(formData)
+			console.log(formData)
+		}catch(e){
+			showErrorToast("Something went wrong")
+		}
+	};
 
 	return (
 		<div className={showHideClassName}>
@@ -78,7 +109,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
 
 						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Category</h6>
 						<select className="textfield" onChange={onCategoryChange}>
-							{categories.map((n) => (
+							{Object.keys(categories).map((n) => (
 								<option className="dropdown-item" value={n}>
 									{n}
 								</option>
@@ -94,19 +125,20 @@ const AddExpenseModal = ({ handleClose, show }) => {
 							))}
 						</select>
 
-						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Notes</h6>
-
+						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Description</h6>
 						<input
-							value={notes}
+							value={description}
 							className="textfield"
 							onChange={(e) => updateFormData(e)}
 							type="text"
-							name="notes"
+							name="description"
 							required
 						/>
 
 						<div className="create-expense-button-container">
-							<button className="create-expense-button">Create</button>
+							<button className="create-expense-button" onClick={handleSubmit}>{
+								creatingExpense ? "Creating" : "Create"
+							}</button>
 						</div>
 					</form>
 				</div>

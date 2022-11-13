@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "../../pages/home/home.css";
 import LoadingDots from "../loader/loading_dots";
+import useStore from "../../state";
 
 const ExpenditureBreakdown = () => {
 	const [loading, setLoading] = useState(true);
+	const userId = useStore(state => state.userId)
+	const fetchExpenditureBreakdown = useStore(state => state.fetchExpenditureBreakdown)
 	const [data, setData] = useState({
 		totalSpent: "3,000",
 		today: "200",
@@ -23,9 +26,7 @@ const ExpenditureBreakdown = () => {
 	];
 
 	useEffect(() => {
-		setTimeout(() => {
-			setLoading(false);
-		}, 3000);
+		fetchExpenditureBreakdown(userId)
 	});
 
 	return (

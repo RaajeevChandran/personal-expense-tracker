@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../../state";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from 'react-cookie';
 
 export const Login = (props) => {
 	const [inputs, setInputs] = useState({});
 	const logIn = useStore((state) => state.logIn);
 	const navigate = useNavigate();
 	const [loggingIn, setLoggingIn] = useState(false);
+	const [cookies, setCookie] = useCookies(['userId']);
+
 
 	const handleInputChange = (event) => {
 		event.persist();
@@ -39,10 +42,12 @@ export const Login = (props) => {
 				return;
 			}
 			setLoggingIn(true);
-			await logIn();
+			await logIn(inputs,setCookie);
+			console.log(cookies.userId)
 			setLoggingIn(false);
-			navigate("/");
+			// navigate("/");
 		} catch (e) {
+			console.log(e)
 			showErrorToast("Something went wrong");
 		}
 	};

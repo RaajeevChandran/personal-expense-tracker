@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./expense_table.css";
 import dayjs from "dayjs";
 import Modal from "react-modal";

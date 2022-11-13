@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../state";
+import { useCookies } from 'react-cookie';
 import "./sidebar.css";
 
 const sidebarNavItems = [
@@ -30,8 +31,15 @@ const Sidebar = () => {
 	const sidebarRef = useRef();
 	const indicatorRef = useRef();
 	const location = useLocation();
+	const navigate  = useNavigate()
+	const [cookies,setCookie] = useCookies(['userId'])
 
 	const logOut = useStore((state) => state.logout);
+
+	const onSignOut = () => {
+		logOut(setCookie)
+		navigate("/")
+	}
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -54,7 +62,7 @@ const Sidebar = () => {
 
 	return (
 		<div className="sidebar">
-			<div className="sidebar__logo"></div>
+			<div className="sidebar__logo">{cookies.userId}</div>
 			<div ref={sidebarRef} className="sidebar__menu">
 				<div
 					ref={indicatorRef}
@@ -78,7 +86,7 @@ const Sidebar = () => {
 					</Link>
 				))}
 			</div>
-			<div className="sign-out-button-container" onClick={logOut}>
+			<div className="sign-out-button-container" onClick={onSignOut}>
 				<i
 					style={{ fontSize: "1.75rem", marginRight: "8px" }}
 					class="bx bxs-log-out"

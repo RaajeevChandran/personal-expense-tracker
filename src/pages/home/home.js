@@ -5,10 +5,13 @@ import "font-awesome/css/font-awesome.min.css";
 import { useNavigate } from "react-router-dom";
 import AddExpenseModal from "../../components/add_expense_modal/add_expense_modal";
 import ExpenseCharts from "../../components/expense_charts/expense_charts";
+import { useCookies } from 'react-cookie';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const [showPopup, setShowPopup] = useState(false);
+	const [cookies,setCookie] = useCookies(['userId'])
+
 	const onFabClick = () => {
 		setShowPopup(!showPopup);
 	};
