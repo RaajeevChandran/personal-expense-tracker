@@ -12,20 +12,20 @@ const useStore = create((set) => ({
 		myHeaders.append("user_id", userId);
 		var formdata = new FormData();
 		let categories = {
-			"Food":1,
-			"Automobiles":2,
-			"Entertainment":3,
-			"Clothing":4,
-			"Healthcare":5,
-			"Others":6,
-		}
-		formdata.append("date", data.date+" 00:00:00");
+			Food: 1,
+			Automobiles: 2,
+			Entertainment: 3,
+			Clothing: 4,
+			Healthcare: 5,
+			Others: 6,
+		};
+		formdata.append("date", data.date + " 00:00:00");
 		formdata.append("amount", data.amount);
 		formdata.append("category_id", categories[data["category"]]);
 		formdata.append("description", data.description);
 		formdata.append("expense_type", data["expenseType"]);
 		for (var pair of formdata.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
+			console.log(pair[0] + ", " + pair[1]);
 		}
 		const response = await fetch(url + "/add", {
 			method: "POST",
@@ -33,10 +33,10 @@ const useStore = create((set) => ({
 			body: formdata,
 			redirect: "follow",
 		});
-		if(response.status == 200){
+		if (response.status == 200) {
 			const json = await response.json();
 			console.log(json);
-			await fetchExpenditureBreakdown(false,userId)
+			await fetchExpenditureBreakdown(false, userId);
 		}
 	},
 	fetchExpenditureBreakdown: async (fetchingBreakdown, userId) => {
@@ -156,6 +156,50 @@ const useStore = create((set) => ({
 	logout: (setCookie) => {
 		setCookie("userId", "");
 		set((_) => ({ userId: "" }));
+	},
+	allExpenses: {},
+	creditExpenses: {},
+	debitExpenses: {},
+	fetchExpensesTable: async (userId, type) => {
+		var myHeaders = new Headers();
+		myHeaders.append("user_id", userId);
+
+		var requestOptions = {
+			method: "GET",
+			headers: myHeaders,
+			redirect: "follow",
+		};
+
+		const response = fetch(
+			url +
+				`/expenses${
+					type == "All Expenses"
+						? ""
+						: `${type == "Credit" ? "credit" : "debit"}`
+				}`,
+			requestOptions
+		);
+		if (response.status == 200) {
+			const json = await response.json();
+			console.log(json)
+			switch (type) {
+				case "All Expenses":
+					set((_) => ({
+						allExpenses: json,
+					}));
+					break;
+				case "Credit":
+					set((_) => ({
+						creditExpenses: json,
+					}));
+					break;
+				default:
+					set((_) => ({
+						debitExpenses: json,
+					}));
+					break;
+			}
+		}
 	},
 }));
 export default useStore;

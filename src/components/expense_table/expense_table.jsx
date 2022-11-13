@@ -2,19 +2,60 @@ import React, { useEffect, useState } from "react";
 import "./expense_table.css";
 import dayjs from "dayjs";
 import Modal from "react-modal";
+import useStore from "../../state";
+import Loader from "../../components/loader/loader"
 
 const ExpenseTable = () => {
 	let expenseTypes = ["All Expenses", "Credit", "Debit"];
-	const [expenseType, setExpenseType] = useState("Credit");
+	const [expenseType, setExpenseType] = useState("All Expenses");
 	const [showDeleteExpensePopup, setShowDeleteExpensePopup] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const allExpenses = useStore((state) => state.allExpenses);
+	const creditExpenses = useStore((state) => state.creditExpenses);
+	const debitExpenses = useStore((state) => state.debitExpenses);
+	const [expenseTable,setExpenseTable] = useState(allExpenses)
+
+	const fetchExpensesTable = useStore((state) => state.fetchExpensesTable);
+
+	const userId = useStore((state) => state.userId);
 
 	const onExpenseTypeChange = (e) => {
 		setExpenseType(e.target.value);
+		setExpenseTable(expenseType == "All Expenses" ? allExpenses : (expenseType == "Credit" ? creditExpenses : debitExpenses))
+		fetch();
 	};
 
 	const onDeleteExpenseClick = () => {
 		setShowDeleteExpensePopup(!showDeleteExpensePopup);
 	};
+
+	async function fetch() {
+		if (
+			expenseType == "All Expenses" &&
+			Object.keys(allExpenses).length === 0
+		) {
+			setLoading(true);
+			await fetchExpensesTable(userId, "All Expenses");
+			setLoading(false);
+		} else if (
+			expenseType == "Credit" &&
+			Object.keys(creditExpenses).length === 0
+		) {
+			setLoading(true);
+
+			await fetchExpensesTable(userId, "Credit");
+			setLoading(false);
+		} else {
+			setLoading(true);
+
+			await fetchExpensesTable(userId, "Debit");
+			setLoading(false);
+		}
+	}
+
+	useEffect(() => {
+		fetch();
+	});
 
 	const customStyles = {
 		content: {
@@ -85,7 +126,9 @@ const ExpenseTable = () => {
 				</div>
 			</Modal>
 
-			<table className="expense-table">
+			{
+				loading ? <Loader/> : (
+					<table className="expense-table">
 				<thead>
 					<tr>
 						<th className="column-names">Date</th>
@@ -96,7 +139,7 @@ const ExpenseTable = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{Array.from(Array(20).keys()).map((e) => {
+					{Object.keys(expenseTable).map((e) => {
 						return (
 							<tr>
 								<td className="table-entry">
@@ -121,6 +164,8 @@ const ExpenseTable = () => {
 					})}
 				</tbody>
 			</table>
+				)
+			}
 		</div>
 	);
 };

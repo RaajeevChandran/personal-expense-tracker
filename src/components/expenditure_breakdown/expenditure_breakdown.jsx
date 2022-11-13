@@ -38,7 +38,7 @@ const ExpenditureBreakdown = () => {
 								<div className="card-body d-flex justify-content-between align-items-end">
 									<div className="card-number">
 										<div className="h3 m-0">
-											{  `₹ ${val === null ? '0' : val}`}
+											{  `₹ ${val === null ? '0' : val.toLocaleString('en-US')}`}
 										</div>
 										<small>
 											<strong>
@@ -72,7 +72,7 @@ const ExpenditureBreakdown = () => {
 										<div className="h3 m-0">
 											{
 												key === "mostSpentOn" || key == "leastSpentOn" ?
-												val : (val === undefined ? '-' : `₹ ${val}`)
+												val : (val === undefined ? '-' : `₹ ${val.toLocaleString('en-US')}`)
 											}
 											
 										</div>
