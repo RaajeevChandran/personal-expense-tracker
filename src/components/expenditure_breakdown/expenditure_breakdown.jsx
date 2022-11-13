@@ -5,19 +5,10 @@ import LoadingDots from "../loader/loading_dots";
 import useStore from "../../state";
 
 const ExpenditureBreakdown = () => {
-	const [loading, setLoading] = useState(true);
 	const userId = useStore(state => state.userId)
+	const expenditureBreakdown = useStore(state => state.expenditureBreakdown)
+	const fetchingExpenditureBreakdown = useStore(state=>state.fetchingExpenditureBreakdown)
 	const fetchExpenditureBreakdown = useStore(state => state.fetchExpenditureBreakdown)
-	const [data, setData] = useState({
-		totalSpent: "3,000",
-		today: "200",
-		thisWeek: "500",
-		thisMonth: "1,000",
-		thisYear: "3000",
-		mostSpentOn: "Food",
-		mostSpentDay: "Thursday",
-		leastSpentDay: "Monday",
-	});
 	const gradients = [
 		"card-purple-blue",
 		"card-salmon-pink",
@@ -25,14 +16,19 @@ const ExpenditureBreakdown = () => {
 		"card-purple-pink",
 	];
 
-	useEffect(() => {
-		fetchExpenditureBreakdown(userId)
+	useEffect( () => {
+		async function fetch(){
+			if(!fetchingExpenditureBreakdown && Object.keys(expenditureBreakdown).length  === 0){
+				await fetchExpenditureBreakdown(fetchingExpenditureBreakdown,userId)
+			}
+		}
+		 fetch();
 	});
 
 	return (
 		<div className="container-fluid">
 			<div className="row row-cols-4">
-				{Object.entries(data)
+				{Object.entries(expenditureBreakdown)
 					.slice(0, 4)
 					.map(([key, val], i) => (
 						<div className="col-12 col-sm-6 col-md-3">
@@ -42,11 +38,12 @@ const ExpenditureBreakdown = () => {
 								<div className="card-body d-flex justify-content-between align-items-end">
 									<div className="card-number">
 										<div className="h3 m-0">
-											{loading ? <LoadingDots /> : `₹ ${val}`}
+											{  `₹ ${val === null ? '0' : val}`}
 										</div>
 										<small>
 											<strong>
-												{key
+												{key === null ? '-' 
+												: key
 													.replace(/([A-Z])/g, " $1")
 													.charAt(0)
 													.toUpperCase() +
@@ -63,7 +60,7 @@ const ExpenditureBreakdown = () => {
 							</div>
 						</div>
 					))}
-				{Object.entries(data)
+				{Object.entries(expenditureBreakdown)
 					.slice(4)
 					.map(([key, val], i) => (
 						<div className="col-12 col-sm-6 col-md-3 mt-3">
@@ -73,13 +70,11 @@ const ExpenditureBreakdown = () => {
 								<div className="card-body d-flex justify-content-between align-items-end">
 									<div className="card-number">
 										<div className="h3 m-0">
-											{loading ? (
-												<LoadingDots />
-											) : val.match(/^\d/) ? (
-												`₹ ${val}`
-											) : (
-												val
-											)}
+											{
+												key === "mostSpentOn" || key == "leastSpentOn" ?
+												val : (val === undefined ? '-' : `₹ ${val}`)
+											}
+											
 										</div>
 										<small>
 											<strong>

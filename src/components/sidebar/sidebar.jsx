@@ -62,7 +62,9 @@ const Sidebar = () => {
 
 	return (
 		<div className="sidebar">
-			<div className="sidebar__logo">{cookies.userId}</div>
+			<div className="sidebar__logo">
+				{/* {cookies.userId} */}
+				</div>
 			<div ref={sidebarRef} className="sidebar__menu">
 				<div
 					ref={indicatorRef}

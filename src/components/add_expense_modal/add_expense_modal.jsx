@@ -7,40 +7,46 @@ const AddExpenseModal = ({ handleClose, show }) => {
 	const showHideClassName = show ? "modal display-block" : "modal display-none";
 
 	const addExpense = useStore(state => state.addExpense)
+	const fetchExpenditureBreakdown = useStore(state => state.fetchExpenditureBreakdown)
+
+	const userId = useStore(state => state.userId)
 
 	const [formData, setFormData] = useState({
 		date: "",
 		amount: "",
-		category: 1,
+		category: "Food",
 		description: "",
-		expenseType: "credit",
+		expenseType: "debit",
 	});
 
-	let categories = {
-		"Food":1,
-		"Automobiles":2,
-		"Entertainment":3,
-		"Clothing":4,
-		"Healthcare":5,
-		"Others":6,
-	};
-	let expenseTypes = ["Credit", "Debit"];
+	let categories = [
+		"Food",
+		"Automobiles",
+		"Entertainment",
+		"Clothing",
+		"Healthcare",
+		"Others",
+	];
+	let expenseTypes = ["debit", "credit"];
 
 	const [creatingExpense,setCreatingExpense] = useState(false)
 
-	const onCategoryChange = (e) => {
-		setFormData({
-			...formData,
-			'category_id': categories[e.target.value],
-		})
-	};
+	// const onCategoryChange = (e) => {
+	// 	setFormData({
+	// 		...formData,
+	// 		'category': e.target.value,
+	// 	})
+	// 	console.log(formData)
+	// };
 
-	const onExpenseTypeChange = (e) => {
-		setFormData({
-			...formData,
-			'expense_type': e.target.value.toLowerCase(),
-		})
-	};
+	// const onExpenseTypeChange = (e) => {
+	// 	setFormData({
+	// 		...formData,
+	// 		'expense_type': e.target.value.toLowerCase(),
+	// 	})
+	// 	console.log(formData)
+
+	// };
 
 	const updateFormData = (event) =>
 		setFormData({
@@ -63,11 +69,14 @@ const AddExpenseModal = ({ handleClose, show }) => {
 		});
 	};
 
-	const handleSubmit = async () => {
+	const handleSubmit =  async(event) => {
 		try{
-			// setCreatingExpense(true)
-			// await addExpense(formData)
+			event.preventDefault()
+			setCreatingExpense(true)
+			await addExpense(formData,userId,fetchExpenditureBreakdown)
+			setCreatingExpense(false)
 			console.log(formData)
+			handleClose()
 		}catch(e){
 			showErrorToast("Something went wrong")
 		}
@@ -84,7 +93,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
 
 				<div className="form">
 					<h1>Create Expense</h1>
-					<form>
+					<form onSubmit={handleSubmit}>
 						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Date</h6>
 						<input
 							value={date}
@@ -108,8 +117,8 @@ const AddExpenseModal = ({ handleClose, show }) => {
 						/>
 
 						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Category</h6>
-						<select className="textfield" onChange={onCategoryChange}>
-							{Object.keys(categories).map((n) => (
+						<select className="textfield" name="category" onChange={e => updateFormData(e)}>
+							{categories.map((n) => (
 								<option className="dropdown-item" value={n}>
 									{n}
 								</option>
@@ -117,10 +126,10 @@ const AddExpenseModal = ({ handleClose, show }) => {
 						</select>
 
 						<h6 style={{ margin: "1em", fontWeight: "bold" }}>Expense Type</h6>
-						<select className="textfield" onChange={onExpenseTypeChange}>
+						<select className="textfield" name="expenseType" onChange={e => updateFormData(e)}>
 							{expenseTypes.map((n) => (
 								<option className="dropdown-item" value={n}>
-									{n}
+									{n.charAt(0).toUpperCase() + n.slice(1)}
 								</option>
 							))}
 						</select>
@@ -132,12 +141,12 @@ const AddExpenseModal = ({ handleClose, show }) => {
 							onChange={(e) => updateFormData(e)}
 							type="text"
 							name="description"
-							required
+							// required
 						/>
 
 						<div className="create-expense-button-container">
-							<button className="create-expense-button" onClick={handleSubmit}>{
-								creatingExpense ? "Creating" : "Create"
+							<button className="create-expense-button" type="submit">{
+								 creatingExpense ? "Creating" : "Create"
 							}</button>
 						</div>
 					</form>

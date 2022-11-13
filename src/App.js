@@ -10,11 +10,16 @@ import { useEffect } from 'react';
 import useStore from './state';
 
 function App() {
-  const [cookies,setCookies]      = useCookies()
+  const [cookies,setCookies] = useCookies()
+  const userId = useStore(state => state.userId)
   const setUserId = useStore(state =>state.setUserId)
 
   useEffect(()=>{
+    console.log(cookies.userId)
     setUserId(cookies.userId)
+    console.log(
+        "user id "+userId
+    )
   })
 
     return (

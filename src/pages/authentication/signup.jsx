@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../../state";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from 'react-cookie';
 
 export const Register = (props) => {
 	const [inputs, setInputs] = useState({});
 	const [signingUp, setSigningUp] = useState(false);
 	const navigate = useNavigate();
 	const signUp = useStore((state) => state.signUp);
+	const [cookies, setCookie] = useCookies(['userId']);
+
 
 	const handleInputChange = (event) => {
 		event.persist();
@@ -48,7 +51,7 @@ export const Register = (props) => {
 				return;
 			}
 			setSigningUp(true);
-			await signUp(inputs);
+			await signUp(inputs,setCookie);
 			setSigningUp(false);
 			navigate("/");
 		} catch (e) {
