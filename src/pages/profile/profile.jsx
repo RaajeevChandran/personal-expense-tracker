@@ -11,6 +11,8 @@ export default function Profile() {
 	const fetchProfile = useStore(state => state.getProfile);
 	const userId = useStore(state => state.userId)
 	const [changedMonthlyLimit,setChangedMonthlyLimit] = useState(false)
+	const [updatingMonthlyLimit,setUpdatingMonthlyLimit] = useState(false)
+	const updateMonthlyLimitAPI = useStore(state => state.updateMonthlyLimit)
 
 	const onMonthlyLimitChange = (event) => {
 		setMonthlyLimitTextFieldValue(event.target.value);
@@ -27,6 +29,12 @@ export default function Profile() {
 		}
 		fetch();
 	})
+
+	const onUpdateButtonClick = async() => {
+		setUpdatingMonthlyLimit(true)
+		await updateMonthlyLimitAPI(userId,monthlyLimitTextFieldValue,userProfile)
+		setUpdatingMonthlyLimit(false)
+	}
 
 	return (
 		<div>
@@ -62,15 +70,20 @@ export default function Profile() {
 						Current Monthly Limit
 					</h6>
 					<input
-						value={userProfile.monthlyLimit}
+						value={changedMonthlyLimit? monthlyLimitTextFieldValue : userProfile.monthlyLimit}
 						className="monthly-limit-textfield"
 						onChange={(e) => onMonthlyLimitChange(e)}
 						type="number"
 						name="monthlyLimit"
-						readOnly
 					/>
 					{
-						changedMonthlyLimit ? <button>Save</button> : null
+						changedMonthlyLimit ? 
+						(
+							<button className="update-monthly-limit-button" onClick={onUpdateButtonClick}>{
+								updatingMonthlyLimit ? "Updating" : "Update"
+						   }</button>
+						)
+					 : null
 					}
 				</div>
 			)}

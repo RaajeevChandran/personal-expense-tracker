@@ -74,6 +74,24 @@ const useStore = create((set) => ({
 	},
 	fetchingProfile: false,
 	userProfile: {},
+	updateMonthlyLimit: async (userId, monthlyLimit, userProfile) => {
+		var myHeaders = new Headers();
+		myHeaders.append("user_id", userId);
+
+		var requestOptions = {
+			method: "PUT",
+			headers: myHeaders,
+			redirect: "follow",
+		};
+
+		const response = await fetch(url+"/update-monthly-limit/"+monthlyLimit, requestOptions);
+		if(response.status===200){
+			userProfile.monthlyLimit = monthlyLimit
+			set(_=>({
+				profile: userProfile
+			}))
+		}
+	},
 	getProfile: async (userId, fetchingProfile) => {
 		if (!fetchingProfile) {
 			set((_) => ({ fetchingProfile: true }));
@@ -324,7 +342,7 @@ const useStore = create((set) => ({
 			headers: myHeaders,
 			redirect: "follow",
 		};
-		await fetch(url+"/delete-expense/"+expenseId, requestOptions);
+		await fetch(url + "/delete-expense/" + expenseId, requestOptions);
 	},
 	deleteExpenseFromTable: (
 		type,
