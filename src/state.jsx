@@ -89,7 +89,7 @@ const useStore = create((set) => ({
 			const response = await fetch(url + "/profile", requestOptions);
 			if (response.status === 200) {
 				const json = await response.json();
-				console.log(json)
+				console.log(json);
 				set((_) => ({
 					userProfile: {
 						name: json["name"],
@@ -102,14 +102,14 @@ const useStore = create((set) => ({
 		}
 	},
 	fetchingCharts: false,
-	chart:{},
+	chart: {},
 	pieChart: [],
 	radarChart: [],
-	fetchCharts: async (userId,fetchingCharts)=>{
-		if(!fetchingCharts){
-			set(_=>({
-				fetchingCharts : true
-			}))
+	fetchCharts: async (userId, fetchingCharts) => {
+		if (!fetchingCharts) {
+			set((_) => ({
+				fetchingCharts: true,
+			}));
 			var myHeaders = new Headers();
 			myHeaders.append("user_id", userId);
 
@@ -120,39 +120,38 @@ const useStore = create((set) => ({
 			};
 
 			const response = await fetch(url + "/chart", requestOptions);
-			if(response.status ==200){
+			if (response.status === 200) {
 				const json = await response.json();
 				const pieChartData = [];
 				const radarChartData = [];
 				Object.entries(json).forEach(([key, value]) => {
-					if(value!==0){
+					if (value !== 0) {
 						pieChartData.push({
 							name: key,
-							value: value
-						})
-
+							value: value,
+						});
 					}
 					radarChartData.push({
 						label: key,
-						value: value.toString()
-					})
-				  });
-				console.log(json)
-				console.log(pieChartData)
-				set(_=>({
-					chart: json,					
-				}))
-				set(_=>({
+						value: value.toString(),
+					});
+				});
+				console.log(json);
+				console.log(pieChartData);
+				set((_) => ({
+					chart: json,
+				}));
+				set((_) => ({
 					pieChart: pieChartData,
-					radarChart: radarChartData
-				}))
+					radarChart: radarChartData,
+				}));
 			}
-			set(_=>({
-				fetchingCharts : false
-			}))
+			set((_) => ({
+				fetchingCharts: false,
+			}));
 		}
 	},
-	addExpense: async (data, userId, fetchExpenditureBreakdown) => {
+	addExpense: async (data, userId, fetchExpenditureBreakdown, fetchChart) => {
 		var myHeaders = new Headers();
 		myHeaders.append("user_id", userId);
 		var formdata = new FormData();
@@ -179,12 +178,13 @@ const useStore = create((set) => ({
 			const json = await response.json();
 			console.log(json);
 			await fetchExpenditureBreakdown(false, userId);
-			var newExpenseMap = {}
+			await fetchChart(userId, false);
+			var newExpenseMap = {};
 			for (var pair of formdata.entries()) {
-				newExpenseMap[pair[0]] = pair[1]
+				newExpenseMap[pair[0]] = pair[1];
 			}
-			newExpenseMap["category"] = data["category"]
-			return newExpenseMap
+			newExpenseMap["category"] = data["category"];
+			return newExpenseMap;
 		}
 	},
 	logIn: async (data, setCookie) => {
@@ -294,6 +294,60 @@ const useStore = create((set) => ({
 			}
 		}
 		set((_) => ({ fetchingExpenseTable: false }));
+	},
+	addToExpenseTable: (
+		type,
+		allExpenses,
+		creditExpenses,
+		debitExpenses,
+		newData
+	) => {
+		set((_) => ({
+			allExpenses: [newData, ...allExpenses],
+		}));
+
+		set((_) =>
+			type === "credit"
+				? {
+						creditExpenses: [newData, ...creditExpenses],
+				  }
+				: {
+						debitExpenses: [newData, ...debitExpenses],
+				  }
+		);
+	},
+	deleteExpense: async (userId, expenseId) => {
+		var myHeaders = new Headers();
+		myHeaders.append("user_id", userId);
+		var requestOptions = {
+			method: "DELETE",
+			headers: myHeaders,
+			redirect: "follow",
+		};
+		await fetch(url+"/delete-expense/"+expenseId, requestOptions);
+	},
+	deleteExpenseFromTable: (
+		type,
+		allExpenses,
+		creditExpenses,
+		debitExpenses,
+		id
+	) => {
+		set((_) => ({
+			allExpenses: allExpenses.filter((e) => e["expense_id"] !== id),
+		}));
+
+		set((_) =>
+			type === "credit"
+				? {
+						creditExpenses: creditExpenses.filter(
+							(e) => e["expense_id"] !== id
+						),
+				  }
+				: {
+						debitExpenses: debitExpenses.filter((e) => e["expense_id"] !== id),
+				  }
+		);
 	},
 }));
 export default useStore;

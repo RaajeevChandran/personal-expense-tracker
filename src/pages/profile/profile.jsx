@@ -62,11 +62,12 @@ export default function Profile() {
 						Current Monthly Limit
 					</h6>
 					<input
-						value={monthlyLimitTextFieldValue}
+						value={userProfile.monthlyLimit}
 						className="monthly-limit-textfield"
 						onChange={(e) => onMonthlyLimitChange(e)}
 						type="number"
 						name="monthlyLimit"
+						readOnly
 					/>
 					{
 						changedMonthlyLimit ? <button>Save</button> : null

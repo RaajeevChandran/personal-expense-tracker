@@ -11,6 +11,11 @@ const AddExpenseModal = ({ handleClose, show }) => {
 
 	const userId = useStore(state => state.userId)
 
+	const addToExpenseTable = useStore(state => state.addToExpenseTable)
+	const allExpenses = useStore(state=> state.allExpenses)
+	const creditExpenses = useStore(state=> state.creditExpenses)
+	const debitExpenses = useStore(state=> state.debitExpenses)
+
 	const [formData, setFormData] = useState({
 		date: "",
 		amount: "",
@@ -73,8 +78,8 @@ const AddExpenseModal = ({ handleClose, show }) => {
 		try{
 			event.preventDefault()
 			setCreatingExpense(true)
-			await addExpense(formData,userId,fetchExpenditureBreakdown)
-			
+			const newExpenseMap = await addExpense(formData,userId,fetchExpenditureBreakdown)
+			addToExpenseTable(formData['expenseType'],allExpenses,creditExpenses,debitExpenses,newExpenseMap)
 			setCreatingExpense(false)
 			console.log(formData)
 			handleClose()

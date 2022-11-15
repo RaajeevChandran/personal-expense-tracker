@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import Modal from "react-modal";
 import useStore from "../../state";
 import Loader from "../../components/loader/loader"
+import { satellite } from "fontawesome";
 
 const ExpenseTable = () => {
 	let expenseTypes = ["All Expenses", "Debit", "Credit"];
@@ -14,8 +15,14 @@ const ExpenseTable = () => {
 	const creditExpenses = useStore((state) => state.creditExpenses);
 	const debitExpenses = useStore((state) => state.debitExpenses);
 	const fetchingTable = useStore(state=>state.fetchingExpensesTable)
+	const [deleteExpenseId,setDeleteExpenseId] = useState('')
+	const [deletingExpense,setDeletingExpense] = useState(false)
 
 	const fetchExpensesTable = useStore((state) => state.fetchExpensesTable);
+
+	const deleteExpenseFromTable = useStore(state=> state.deleteExpenseFromTable)
+	const deleteExpenseAPI = useStore(state=>state.deleteExpense)
+	
 
 	const userId = useStore((state) => state.userId);
 
@@ -24,9 +31,19 @@ const ExpenseTable = () => {
 		fetch();
 	};
 
-	const onDeleteExpenseClick = () => {
-		setShowDeleteExpensePopup(!showDeleteExpensePopup);
+	const onDeleteExpenseIconClick = (id) => {
+		setDeleteExpenseId(id)
+		setDeletingExpense(false)
+		setShowDeleteExpensePopup(true);
 	};
+
+	const onDeleteExpenseButtonOnModalClick = async() => {
+		setDeletingExpense(true)
+		await deleteExpenseAPI(userId,deleteExpenseId)
+		deleteExpenseFromTable(expenseType.toLowerCase(),allExpenses,creditExpenses,debitExpenses,deleteExpenseId)
+		setDeletingExpense(false)
+		setShowDeleteExpensePopup(false)
+	}
 
 	async function fetch() {
 		if (
@@ -93,14 +110,18 @@ const ExpenseTable = () => {
 
 			<Modal
 				isOpen={showDeleteExpensePopup}
-				onRequestClose={onDeleteExpenseClick}
+				onRequestClose={()=>{
+					setShowDeleteExpensePopup(false)
+				}}
 				style={customStyles}
 				contentLabel="Example Modal"
 			>
 				<h1>Delete Expense?</h1>
 				<h4 style={{ fontWeight: "200" }}>
-					Are you sure you want to delete this expense? This action is
-					IRREVERSIBLE
+					{
+						`Are you sure you want to delete this expense ? This action is
+						IRREVERSIBLE`
+					}
 				</h4>
 				<div
 					style={{
@@ -110,13 +131,18 @@ const ExpenseTable = () => {
 						marginTop: "20px",
 					}}
 				>
-					<button style={buttonStyle("#4aa088")} onClick={onDeleteExpenseClick}>
+					<button style={buttonStyle("#4aa088")} onClick={()=>{
+						setShowDeleteExpensePopup(false)
+					}}>
 						Cancel
 					</button>
 					<button
 						style={buttonStyle("linear-gradient(to right, #ff416c, #ff4b2b)")}
+						onClick={onDeleteExpenseButtonOnModalClick}
 					>
-						Delete
+						{
+							deletingExpense  ? 'Deleting' : 'Delete'
+						}
 					</button>
 				</div>
 			</Modal>
@@ -150,7 +176,7 @@ const ExpenseTable = () => {
 										<i
 											className="bx bxs-trash"
 											id="table-entry-icon"
-											onClick={onDeleteExpenseClick}
+											onClick={()=>onDeleteExpenseIconClick(e['expense_id'])}
 											style={{ color: "#de2146" }}
 										/>
 									</div>
