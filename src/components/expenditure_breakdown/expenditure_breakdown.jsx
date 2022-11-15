@@ -61,7 +61,7 @@ const ExpenditureBreakdown = () => {
 						</div>
 					))}
 				{Object.entries(expenditureBreakdown)
-					.slice(4)
+					.slice(4,6)
 					.map(([key, val], i) => (
 						<div className="col-12 col-sm-6 col-md-3 mt-3">
 							<div

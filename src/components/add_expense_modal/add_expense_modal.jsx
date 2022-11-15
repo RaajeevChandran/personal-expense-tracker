@@ -74,6 +74,7 @@ const AddExpenseModal = ({ handleClose, show }) => {
 			event.preventDefault()
 			setCreatingExpense(true)
 			await addExpense(formData,userId,fetchExpenditureBreakdown)
+			
 			setCreatingExpense(false)
 			console.log(formData)
 			handleClose()

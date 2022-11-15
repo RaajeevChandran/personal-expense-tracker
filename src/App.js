@@ -25,7 +25,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={cookies.userId==='' ? <Authentication/> : <AppLayout />}>
+                <Route path='/' element={cookies.userId==='' || cookies.userId === undefined ? <Authentication/> : <AppLayout />}>
                     <Route index element={<Home />} />
                     <Route path='/stats' element={<ExpenseTable />} />
                     <Route path='/profile' element={<Profile />} />

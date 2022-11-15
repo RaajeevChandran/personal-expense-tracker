@@ -6,14 +6,14 @@ import useStore from "../../state";
 import Loader from "../../components/loader/loader"
 
 const ExpenseTable = () => {
-	let expenseTypes = ["All Expenses", "Credit", "Debit"];
+	let expenseTypes = ["All Expenses", "Debit", "Credit"];
 	const [expenseType, setExpenseType] = useState("All Expenses");
 	const [showDeleteExpensePopup, setShowDeleteExpensePopup] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const allExpenses = useStore((state) => state.allExpenses);
 	const creditExpenses = useStore((state) => state.creditExpenses);
 	const debitExpenses = useStore((state) => state.debitExpenses);
-	const [expenseTable,setExpenseTable] = useState(allExpenses)
+	const fetchingTable = useStore(state=>state.fetchingExpensesTable)
 
 	const fetchExpensesTable = useStore((state) => state.fetchExpensesTable);
 
@@ -21,7 +21,6 @@ const ExpenseTable = () => {
 
 	const onExpenseTypeChange = (e) => {
 		setExpenseType(e.target.value);
-		setExpenseTable(expenseType == "All Expenses" ? allExpenses : (expenseType == "Credit" ? creditExpenses : debitExpenses))
 		fetch();
 	};
 
@@ -32,24 +31,20 @@ const ExpenseTable = () => {
 	async function fetch() {
 		if (
 			expenseType == "All Expenses" &&
-			Object.keys(allExpenses).length === 0
+			Array.from(allExpenses).length === 0 && !fetchingTable
 		) {
-			setLoading(true);
-			await fetchExpensesTable(userId, "All Expenses");
-			setLoading(false);
+			await fetchExpensesTable(fetchingTable,userId, "All Expenses");
 		} else if (
 			expenseType == "Credit" &&
-			Object.keys(creditExpenses).length === 0
+			Array.from(creditExpenses).length === 0 && !fetchingTable
 		) {
-			setLoading(true);
+			await fetchExpensesTable(fetchingTable,userId, "Credit");
+		} else if (
+			expenseType == "Debit" &&
+			Array.from(debitExpenses).length === 0 && !fetchingTable
+		) {
 
-			await fetchExpensesTable(userId, "Credit");
-			setLoading(false);
-		} else {
-			setLoading(true);
-
-			await fetchExpensesTable(userId, "Debit");
-			setLoading(false);
+			await fetchExpensesTable(fetchingTable,userId, "Debit");
 		}
 	}
 
@@ -127,7 +122,8 @@ const ExpenseTable = () => {
 			</Modal>
 
 			{
-				loading ? <Loader/> : (
+				fetchingTable ? <Loader/> : (
+					
 					<table className="expense-table">
 				<thead>
 					<tr>
@@ -139,15 +135,15 @@ const ExpenseTable = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{Object.keys(expenseTable).map((e) => {
+					{Array.from(expenseType == "All Expenses" ? allExpenses : (expenseType == "Credit" ? creditExpenses : debitExpenses)).map((e) => {
 						return (
 							<tr>
 								<td className="table-entry">
-									{dayjs("2022-05-05").format("DD MMM YY")}
+									{dayjs(e.date).format("DD MMM YY")}
 								</td>
-								<td className="table-entry">₹ 200</td>
-								<td className="table-entry">Food</td>
-								<td className="table-entry">Breakfast at Sheraton</td>
+								<td className="table-entry">₹ {e.amount}</td>
+								<td className="table-entry">{e["category_name"]}</td>
+								<td className="table-entry">{e["description"]}</td>
 								<td>
 									<div className="table-entry-actions">
 										<i className="bx bx-edit" id="table-entry-icon" />
@@ -163,7 +159,7 @@ const ExpenseTable = () => {
 						);
 					})}
 				</tbody>
-			</table>
+			 </table>
 				)
 			}
 		</div>

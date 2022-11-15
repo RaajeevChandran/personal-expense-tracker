@@ -4,41 +4,9 @@ const url = "https://p-e-t.herokuapp.com";
 
 const useStore = create((set) => ({
 	userId: "",
-	setUserId: (id) => set((state) => ({ userId: id })),
+	setUserId: (id) => set((_) => ({ userId: id })),
 	expenditureBreakdown: {},
 	fetchingBreakdown: false,
-	addExpense: async (data, userId, fetchExpenditureBreakdown) => {
-		var myHeaders = new Headers();
-		myHeaders.append("user_id", userId);
-		var formdata = new FormData();
-		let categories = {
-			Food: 1,
-			Automobiles: 2,
-			Entertainment: 3,
-			Clothing: 4,
-			Healthcare: 5,
-			Others: 6,
-		};
-		formdata.append("date", data.date + " 00:00:00");
-		formdata.append("amount", data.amount);
-		formdata.append("category_id", categories[data["category"]]);
-		formdata.append("description", data.description);
-		formdata.append("expense_type", data["expenseType"]);
-		for (var pair of formdata.entries()) {
-			console.log(pair[0] + ", " + pair[1]);
-		}
-		const response = await fetch(url + "/add", {
-			method: "POST",
-			headers: myHeaders,
-			body: formdata,
-			redirect: "follow",
-		});
-		if (response.status == 200) {
-			const json = await response.json();
-			console.log(json);
-			await fetchExpenditureBreakdown(false, userId);
-		}
-	},
 	fetchExpenditureBreakdown: async (fetchingBreakdown, userId) => {
 		if (!fetchingBreakdown) {
 			set((_) => ({ fetchingBreakdown: true }));
@@ -51,7 +19,6 @@ const useStore = create((set) => ({
 			});
 			if (response.status === 200) {
 				const json = await response.json();
-				console.log("breakdown");
 				console.log({
 					totalSpent:
 						json["total"] === null || json["total"] === undefined
@@ -103,6 +70,121 @@ const useStore = create((set) => ({
 				}));
 			}
 			set((_) => ({ fetchingBreakdown: false }));
+		}
+	},
+	fetchingProfile: false,
+	userProfile: {},
+	getProfile: async (userId, fetchingProfile) => {
+		if (!fetchingProfile) {
+			set((_) => ({ fetchingProfile: true }));
+			var myHeaders = new Headers();
+			myHeaders.append("user_id", userId);
+
+			var requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow",
+			};
+
+			const response = await fetch(url + "/profile", requestOptions);
+			if (response.status === 200) {
+				const json = await response.json();
+				console.log(json)
+				set((_) => ({
+					userProfile: {
+						name: json["name"],
+						email: json["email"],
+						monthlyLimit: json["monthly_limit"],
+					},
+				}));
+			}
+			set((_) => ({ fetchingProfile: false }));
+		}
+	},
+	fetchingCharts: false,
+	chart:{},
+	pieChart: [],
+	radarChart: [],
+	fetchCharts: async (userId,fetchingCharts)=>{
+		if(!fetchingCharts){
+			set(_=>({
+				fetchingCharts : true
+			}))
+			var myHeaders = new Headers();
+			myHeaders.append("user_id", userId);
+
+			var requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow",
+			};
+
+			const response = await fetch(url + "/chart", requestOptions);
+			if(response.status ==200){
+				const json = await response.json();
+				const pieChartData = [];
+				const radarChartData = [];
+				Object.entries(json).forEach(([key, value]) => {
+					if(value!==0){
+						pieChartData.push({
+							name: key,
+							value: value
+						})
+
+					}
+					radarChartData.push({
+						label: key,
+						value: value.toString()
+					})
+				  });
+				console.log(json)
+				console.log(pieChartData)
+				set(_=>({
+					chart: json,					
+				}))
+				set(_=>({
+					pieChart: pieChartData,
+					radarChart: radarChartData
+				}))
+			}
+			set(_=>({
+				fetchingCharts : false
+			}))
+		}
+	},
+	addExpense: async (data, userId, fetchExpenditureBreakdown) => {
+		var myHeaders = new Headers();
+		myHeaders.append("user_id", userId);
+		var formdata = new FormData();
+		let categories = {
+			Food: 1,
+			Automobiles: 2,
+			Entertainment: 3,
+			Clothing: 4,
+			Healthcare: 5,
+			Others: 6,
+		};
+		formdata.append("date", data.date + " 00:00:00");
+		formdata.append("amount", data.amount);
+		formdata.append("category_id", categories[data["category"]]);
+		formdata.append("description", data.description);
+		formdata.append("expense_type", data["expenseType"]);
+		const response = await fetch(url + "/add", {
+			method: "POST",
+			headers: myHeaders,
+			body: formdata,
+			redirect: "follow",
+		});
+		if (response.status === 200) {
+			const json = await response.json();
+			console.log(json);
+			await fetchExpenditureBreakdown(false, userId);
+			var newExpenseMap = {}
+			for (var pair of formdata.entries()) {
+				newExpenseMap[pair[0]] = pair[1]
+			}
+			newExpenseMap["category"] = data["category"]
+			return newExpenseMap
 		}
 	},
 	logIn: async (data, setCookie) => {
@@ -157,49 +239,61 @@ const useStore = create((set) => ({
 		setCookie("userId", "");
 		set((_) => ({ userId: "" }));
 	},
-	allExpenses: {},
-	creditExpenses: {},
-	debitExpenses: {},
-	fetchExpensesTable: async (userId, type) => {
-		var myHeaders = new Headers();
-		myHeaders.append("user_id", userId);
+	allExpenses: [],
+	creditExpenses: [],
+	debitExpenses: [],
+	fetchingExpenseTable: false,
+	fetchExpensesTable: async (fetchingTable, userId, type) => {
+		if (!fetchingTable) {
+			set((_) => ({ fetchingExpenseTable: true }));
+			var myHeaders = new Headers();
+			myHeaders.append("user_id", userId);
 
-		var requestOptions = {
-			method: "GET",
-			headers: myHeaders,
-			redirect: "follow",
-		};
+			var requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow",
+			};
 
-		const response = fetch(
-			url +
-				`/expenses${
-					type == "All Expenses"
-						? ""
-						: `${type == "Credit" ? "credit" : "debit"}`
-				}`,
-			requestOptions
-		);
-		if (response.status == 200) {
-			const json = await response.json();
-			console.log(json)
-			switch (type) {
-				case "All Expenses":
-					set((_) => ({
-						allExpenses: json,
-					}));
-					break;
-				case "Credit":
-					set((_) => ({
-						creditExpenses: json,
-					}));
-					break;
-				default:
-					set((_) => ({
-						debitExpenses: json,
-					}));
-					break;
+			try {
+				console.log("fetching table " + type);
+				const response = await fetch(
+					url +
+						`/expenses${
+							type === "All Expenses"
+								? ""
+								: `?type=${type === "Credit" ? "credit" : "debit"}`
+						}`,
+					requestOptions
+				);
+
+				if (response.status === 200) {
+					const json = await response.json();
+					console.log(json);
+					console.log("type " + type + json.length);
+					switch (type) {
+						case "All Expenses":
+							set((_) => ({
+								allExpenses: json,
+							}));
+							break;
+						case "Credit":
+							set((_) => ({
+								creditExpenses: json,
+							}));
+							break;
+						default:
+							set((_) => ({
+								debitExpenses: json,
+							}));
+							break;
+					}
+				}
+			} catch (e) {
+				set((_) => ({ fetchingExpenseTable: false }));
 			}
 		}
+		set((_) => ({ fetchingExpenseTable: false }));
 	},
 }));
 export default useStore;
